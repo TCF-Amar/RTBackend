@@ -20,11 +20,14 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://rtc-frontend.vercel.app"],
+    origin: "*",
     credentials: true,
   })
 );
 
+app.get("/", (req, res) => {
+  res.send("API is running...");
+});
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
