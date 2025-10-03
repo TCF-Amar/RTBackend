@@ -38,9 +38,11 @@ export const signup = async (req, res) => {
         email: newUser.email,
         profilePic: newUser.profilePic,
       });
+      res.cookie("jwt", token, { httpOnly: true });
     } else {
       res.status(400).json({ message: "Invalid user data" });
     }
+    // set cookie in the browser
   } catch (error) {
     console.log("Error in signup controller", error.message);
     res.status(500).json({ message: "Internal Server Error" });
@@ -69,6 +71,8 @@ export const login = async (req, res) => {
       email: user.email,
       profilePic: user.profilePic,
     });
+    // set cookie in the browser
+    res.cookie("jwt", token, { httpOnly: true });
   } catch (error) {
     console.log("Error in login controller", error.message);
     res.status(500).json({ message: "Internal Server Error" });
