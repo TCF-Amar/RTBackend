@@ -6,16 +6,14 @@ export const generateToken = (userId, res) => {
   });
 
   // Set cookie named 'jwt'. Use stricter SameSite in development and
-  // 'none' + secure in production (for cross-site cookies over HTTPS).
-  const isProd = process.env.NODE_ENV === "production";
-
   res.cookie("jwt", token, {
     httpOnly: true,
-    secure: false,
-    // sameSite: isProd ? "none" : "lax",
+    secure: false,       // only HTTPS
+    sameSite: "none",   // cross-site requests allowed
     path: "/",
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   });
+
 
   return token;
 };
