@@ -9,7 +9,7 @@ export const generateToken = (userId, res) => {
   // Set cookie named 'jwt'. Use stricter SameSite in development and
   res.cookie("jwt", token, {
     httpOnly: true,
-    secure: false,       // only HTTPS
+    secure: idProd,       // only HTTPS
     sameSite: "none",   // cross-site requests allowed
     path: "/",
     maxAge: 7 * 24 * 60 * 60 * 1000,
