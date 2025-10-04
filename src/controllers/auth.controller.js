@@ -2,6 +2,7 @@ import { generateToken } from "../lib/utils.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import cloudinary from "../lib/cloudinary.js";
+import jwt from "jsonwebtoken";
 
 
 
@@ -36,7 +37,11 @@ export const signup = async (req, res) => {
     await newUser.save();
 
     // generate and set token in cookie
-    const token = generateToken(newUser._id, res);
+    let token = generateToken(newUser._id, res);
+    // fallback: if generateToken didn't return a token (safety), create one here
+    if (!token && process.env.JWT_SECRET) {
+      token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+    }
 
     res.status(201).json({
       _id: newUser._id,
@@ -65,7 +70,11 @@ export const login = async (req, res) => {
     }
 
     // generate and set token in cookie
-    const token = generateToken(user._id, res);
+    let token = generateToken(user._id, res);
+    // fallback: if generateToken didn't return a token (safety), create one here
+    if (!token && process.env.JWT_SECRET) {
+      token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+    }
 
     res.status(200).json({
       _id: user._id,
